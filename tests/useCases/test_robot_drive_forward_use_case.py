@@ -15,6 +15,22 @@ def test_robot_drive_forward():
     robot_forward.execute(robot)
 
     driver.drive.assert_called_with(
-      [ m.MotorInstruction("outA", 360 , 90),
-        m.MotorInstruction("outB", 360 , 90) ]
+      [ m.MotorInstruction("Number5","outA", 360 , 90),
+        m.MotorInstruction("Number5","outB", 360 , 90) ]
     )
+
+def test_robot_drive_left():
+        driver = mock.Mock()
+        driver.drive.return_value = None
+        robot_forward = uc.RobotTurnLeftUseCase(driver)
+
+        leftMotor = m.Motor('A')
+        rightMotor = m.Motor('B')
+        robot = m.Robot("Number5", leftMotor, rightMotor)
+
+        robot_forward.execute(robot)
+
+        driver.drive.assert_called_with(
+          [ m.MotorInstruction("Number5","outA", -360 , 90),
+            m.MotorInstruction("Number5","outB", 360 , 90) ]
+        )

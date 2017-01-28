@@ -18,6 +18,12 @@ class Robot:
     def rightMotor(self):
         return self._rightMotor
 
+    def rotate_left_motor(self,rotations,speed):
+        return MotorInstruction(self.name, self._leftMotor.port, rotations * 360, speed)
+
+    def rotate_right_motor(self, rotations, speed):
+        return MotorInstruction(self.name, self._rightMotor.port, rotations * 360, speed)
+
 class Motor:
 
     def __init__(self, port):
@@ -29,14 +35,22 @@ class Motor:
 
 class MotorInstruction:
 
-    def __init__(self, port, rotation, speed):
+    def __init__(self, robot_name, port, rotation, speed):
+        self._robot_name = robot_name
         self._port = port
         self._rotation = rotation
         self._speed = speed
 
     def __eq__(self, other):
-        return ((self._port,self._rotation,self._speed) ==
-                (other._port,other._rotation,other._speed))
+        return ((self._robot_name, self._port, self._rotation,self._speed) ==
+                (other._robot_name, other._port, other._rotation, other._speed))
+
+    def __repr__(self):
+        return self._port + ":" + str(self._rotation)
+
+    @property
+    def robot_name(self):
+        return self._robot_name
 
     @property
     def port(self):

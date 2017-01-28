@@ -6,11 +6,20 @@ class RobotForwardUseCase:
         self.driver = driver
 
     def execute(self,robot):
-        # logic for driving forward
-        # { MotorPort, Degrees to Rotate, Speed }
         instructions = [
-            MotorInstruction(robot.leftMotor.port,360,90),
-            MotorInstruction(robot.rightMotor.port,360,90)
+            robot.rotate_left_motor(1,90),
+            robot.rotate_right_motor(1,90)
         ]
+        self.driver.drive(instructions)
 
+class RobotTurnLeftUseCase:
+
+    def __init__(self, driver):
+        self.driver = driver
+
+    def execute(self,robot):
+        instructions = [
+            robot.rotate_left_motor(-1,90),
+            robot.rotate_right_motor(1,90)
+        ]
         self.driver.drive(instructions)
