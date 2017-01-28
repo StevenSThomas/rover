@@ -1,36 +1,55 @@
 import pytest
-from unittest import mock
+from unittest import mock,TestCase
 from rover.domain import models as m
 from rover.use_cases import robot_drive_use_cases as uc
 
-def test_robot_drive_forward():
-    driver = mock.Mock()
-    driver.drive.return_value = None
-    robot_forward = uc.RobotForwardUseCase(driver)
+class RobotDriveTestCases(TestCase):
+    def setUp(self):
+        self.robot = m.Robot("Number5",m.Motor('A'),m.Motor('B'))
 
-    leftMotor = m.Motor('A')
-    rightMotor = m.Motor('B')
-    robot = m.Robot("Number5", leftMotor, rightMotor)
+    def tearDown(self):
+        self.robot = None
 
-    robot_forward.execute(robot)
-
-    driver.drive.assert_called_with(
-      [ m.MotorInstruction("Number5","outA", 360 , 90),
-        m.MotorInstruction("Number5","outB", 360 , 90) ]
-    )
-
-def test_robot_drive_left():
+    def test_robot_drive_forward(self):
         driver = mock.Mock()
         driver.drive.return_value = None
-        robot_forward = uc.RobotTurnLeftUseCase(driver)
-
-        leftMotor = m.Motor('A')
-        rightMotor = m.Motor('B')
-        robot = m.Robot("Number5", leftMotor, rightMotor)
-
-        robot_forward.execute(robot)
+        robot_forward = uc.RobotForwardUseCase(driver)
+        robot_forward.execute(self.robot)
 
         driver.drive.assert_called_with(
-          [ m.MotorInstruction("Number5","outA", -360 , 90),
+          [ m.MotorInstruction("Number5","outA", 360 , 90),
             m.MotorInstruction("Number5","outB", 360 , 90) ]
         )
+
+    def test_robot_drive_left(self):
+            driver = mock.Mock()
+            driver.drive.return_value = None
+            robot_forward = uc.RobotTurnLeftUseCase(driver)
+            robot_forward.execute(self.robot)
+
+            driver.drive.assert_called_with(
+              [ m.MotorInstruction("Number5","outA", -360 , 90),
+                m.MotorInstruction("Number5","outB", 360 , 90) ]
+            )
+
+    def test_robot_drive_right(self):
+            driver = mock.Mock()
+            driver.drive.return_value = None
+            robot_forward = uc.RobotTurnRightUseCase(driver)
+            robot_forward.execute(self.robot)
+
+            driver.drive.assert_called_with(
+              [ m.MotorInstruction("Number5","outA", 360 , 90),
+                m.MotorInstruction("Number5","outB", -360 , 90) ]
+            )
+
+    def test_robot_reverse(self):
+            driver = mock.Mock()
+            driver.drive.return_value = None
+            robot_forward = uc.RobotReverseUseCase(driver)
+            robot_forward.execute(self.robot)
+
+            driver.drive.assert_called_with(
+              [ m.MotorInstruction("Number5","outA", -360 , 90),
+                m.MotorInstruction("Number5","outB", -360 , 90) ]
+            )
