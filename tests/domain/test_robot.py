@@ -1,6 +1,8 @@
 from rover.domain import models as m
 
 def test_robot_model_init():
-    name = "testy"
-    robot = m.Robot(name)
+    name = "Number5"
+    leftMotor = m.Motor("A")
+    rightMotor = m.Motor("B")
+    robot = m.Robot(name, leftMotor, rightMotor)
     assert robot.name == name
