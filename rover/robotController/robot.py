@@ -5,9 +5,9 @@
 #-------------------------------------------------------------------------------
 
 # robot
-
+import time
 from rover.robotController.motion import Motion
-from rover.robotController.communication import Com
+from rover.robotController.com import Com
 import json
 
 class Robot:
@@ -16,29 +16,26 @@ class Robot:
         self.com = Com(broker)
         self.com.subscribe(self.on_message)
         self.com.start()
+        while True:
+            time.sleep(1)
+
 
     def on_message(self, userdata, msg):
         self.processPlan(msg.payload.decode())
 
-    def processPlan(self,plan):
-        planObject = json.loads(plan)
-        steps = planObject["steps"]
-        for step in steps:
+    def processPlan(self,splan):
+        plan = json.loads(splan)
+        for step in plan["steps"]:
+            self.com.publish("step/done", step["id"] )
+            self.com.client.loop()
             self.processCommand(step["command"])
-            self.com.client.publish("step/done", step["id"])
 
     def processCommand(self,cmd):
-        verb = cmd["verb"]
-        speed = cmd["speed"]
-        rotations = cmd["rotations"]
-        if verb == "DRIVE":
-            self.motion.drive(rotations,speed)
-        elif verb == "TURN":
-            self.motion.turn(rotations,speed)
-
-
-
-
+        # load commands and process in nonblocking?
+        if cmd["verb"] == "DRIVE":
+            self.motion.drive(cmd["rotations"], cmd["speed"])
+        elif cmd["verb"] == "TURN":
+            self.motion.turn(cmd["rotations"], cmd["speed"])
 
 
 if __name__ == "__main__":
