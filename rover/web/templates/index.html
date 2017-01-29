@@ -9,8 +9,16 @@
                 socket.emit('my event', {data: 'I\'m connected!'});
                });
          </script>
+         <script src="/static/webcomponentsjs/webcomponents-lite.min.js"></script>
+         <link rel="import" href="/static/components/rover-planner.html" />
  </head>
  <body>
-         <h1>Hello World</h1>
+         <button onclick="sendPlan()" type="button">Press Me</button>
+         <rover-planner></rover-planner>
  </body>
+ <script>
+   function sendPlan() {
+       socket.send("hello")
+   }
+ </script>
  </html>
