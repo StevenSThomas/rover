@@ -1,6 +1,21 @@
 import uuid
-from enum import Enum
+from rover.utils import observable
 
+
+class RobotStatus(observable.Observable):
+    def __init__(self):
+        super(RobotStatus, self).__init__()
+        self._value = "off-line"
+        
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, v):
+        self._value = v
+        self.notify()
 
 
 class Plan:

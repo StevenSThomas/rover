@@ -28,6 +28,7 @@ class Motion:
         self._rotate_motor(self.leftMotor, rotations, speed)
         self._rotate_motor(self.rightMotor, -rotations, speed)
         self._wait_until_done_moving()
+        ev3.Sound.speak('number five, is alive').wait()
 
     def turn_left(self,roations,speed):
         self.turn(-rotations,speed)

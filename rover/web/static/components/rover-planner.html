@@ -1,12 +1,24 @@
 <link rel="import" href="../polymer/polymer.html" >
 <dom-module id="rover-planner">
         <template>
-                this is content for the planner
+                {{robotStatus}}
         </template>
 </dom-module>
 
 <script>
   Polymer({
-          is: "rover-planner"
+          is: "rover-planner",
+          properties: {
+                  robotStatus: {
+                          type:String,
+                          value: "offline"
+                  }
+          },
+          created: function() {
+                  var self = this;
+                  socket.on("robot_status_change", function(payload){
+                        self.robotStatus = payload.data;
+                  });
+          }
   })
 </script>

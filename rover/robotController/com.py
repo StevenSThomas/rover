@@ -16,7 +16,8 @@ class Com:
         self.client.loop_stop()
 
     def on_connect(self,client, userdata, flags, rc):
-        print("connected with result code " + str(rc))
+        print("*** communication system online *** " + str(rc))
+        self.client.publish("robot/status","ready")
         self.client.subscribe("robot/newplan")
 
     def on_publish(self,client, userdata, mid):

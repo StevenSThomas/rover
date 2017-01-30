@@ -1,10 +1,4 @@
-#!/usr/bin/env python3
-
-#-------------------------------------------------------------------------------
-# Copyright (c) 2017 Steven S. Thomas <steventhomasnc@gmail.com>
-#-------------------------------------------------------------------------------
-
-# robot
+"""Robot."""
 import time
 from rover.robotController.motion import Motion
 from rover.robotController.com import Com
