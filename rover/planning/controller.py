@@ -11,7 +11,7 @@ class Planner:
         """Create a new planner service."""
         self.currentPlan = m.Plan()
         self.robot_status = m.RobotStatus()
-        self.com = com.Com("pro.local")
+        self.com = com.Com()
         self.com.subscribe("robot/status", self.on_robot_status)
 
 

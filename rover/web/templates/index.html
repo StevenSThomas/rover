@@ -2,6 +2,10 @@
 <html>
   <head>
           <title>Rover Planner</title>
+
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
           <script type="text/javascript" src="/static/socket.io.min.js"></script>
           <script type="text/javascript" charset="utf-8">
                 var socket = io.connect('http://' + document.domain + ':' + location.port);
@@ -10,21 +14,16 @@
                });
          </script>
          <script src="/static/components/webcomponentsjs/webcomponents-lite.min.js"></script>
-         <link rel="import" href="/static/components/font-roboto/roboto.html">
-         <link rel="import" href="/static/customcomponents/rover-dashboard.html" />
-         <style>
-           body {
-                   font-family:roboto;
-           }
-         </style>
- </head>
- <body>
-         <rover-dashboard></rover-dashboard
- </body>
- <script>
-   function sendPlan() {
-       socket.send("hello")
-   }
 
- </script>
+         <link rel="import" href="/static/components/polymer/polymer.html" >
+         <link rel="import" href="/static/customcomponents/rover-dashboard.html" >
+         <link rel="import" href="/static/components/iron-flex-layout/iron-flex-layout-classes.html" >
+         <style is="custom-style" include="iron-flex"></style>
+         <link  rel="stylesheet" href="/static/css/screen.css" >
+
+ </head>
+ <body class="fullbleed vertical layout">
+         <rover-dashboard></rover-dashboard>
+
+</body>
  </html>

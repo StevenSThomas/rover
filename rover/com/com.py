@@ -5,7 +5,7 @@ import paho.mqtt.client as mqtt
 class Com:
     """implements communication subsystem."""
 
-    def __init__(self, broker):
+    def __init__(self):
         """Create a communication subsystem.
 
         arguments:
@@ -13,11 +13,10 @@ class Com:
 
         """
         self.callbacks = []
-        self.broker = broker
         self.client = mqtt.Client()
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
-        self.client.connect(broker, 1883, 60)
+        self.client.connect("127.0.0.1")
         self.client.loop_start()
 
     def publish(self, topic, payload):

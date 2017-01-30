@@ -1,0 +1,36 @@
+/*
+        dark :  #2C3240
+        panel:  #3C4C65
+        light:  #D1D8EA
+        blue:   #107BD2
+        green:  #9FC20C
+
+
+*/
+body {
+        background: #2C3240;
+        color: #D1D8EA;
+        font-family: Helvetica, sans-serif;
+        font-size:14px;
+}
+
+.panel {
+        background: #3C4C65;
+        padding:10px;
+        border-radius:2px;
+}
+
+.label {
+
+        font-weight:700;
+        font-size:14px;
+        text-transform: uppercase;
+}
+
+.blue {
+        color:#107BD2;
+}
+
+.green {
+        color:#9FC20C;
+}
