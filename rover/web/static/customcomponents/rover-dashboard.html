@@ -1,0 +1,27 @@
+<link rel="import" href="../polymer/polymer.html" >
+<link rel="import" href="../components/app-layout.html" >
+<dom-module id="rover-dashboard">
+        <template>
+                <app-header>
+                        <app-toolbar>
+                                <div main-title>Rover Command</div>
+                        </app-toolbar>
+                </app-header>
+        </template>
+</dom-module>
+<script>
+  Polymer({
+          is: "rover-dashboard",
+          properties: {
+                  leftShow: {
+                          type: Boolean,
+                          value: true,
+                          notify:true
+                  },
+                  rightShow: {
+                          type: Boolean,
+                          value: true
+                  }
+          }
+  });
+</script>

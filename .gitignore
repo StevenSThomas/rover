@@ -2,3 +2,4 @@
 ENV
 lib
 __pycache__/
+rover/web/static/components
