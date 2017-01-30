@@ -1,12 +1,28 @@
-<link rel="import" href="../polymer/polymer.html" >
-<link rel="import" href="../components/app-layout.html" >
+<link rel="import" href="../components/polymer/polymer.html" >
+<link rel="import" href="../components/paper-styles/paper-styles.html" >
+<link rel="import" href="../components/app-layout/app-layout.html" >
+<link rel="import" href="../components/paper-button/paper-button.html" >
+<link rel="import" href="../components/paper-card/paper-card.html" >
 <dom-module id="rover-dashboard">
         <template>
-                <app-header>
-                        <app-toolbar>
-                                <div main-title>Rover Command</div>
-                        </app-toolbar>
-                </app-header>
+                <app-layout>
+                        <app-header class="header" reveals snaps shadow style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+                                <app-toolbar class="toolbar" >
+                                  <div main-title>Rover Command Planner</div>
+                                </app-toolbar>
+                        </app-header>
+                        <paper-card raised>
+                                <div class="card-actions">
+                                        <paper-button raised class="indigo" >FWD</paper-button>
+                                        <paper-button raised class="indigo" >BWD</paper-button>
+                                        <paper-button raised class="indigo" >RT</paper-button>
+                                        <paper-button raised class="indigo" >LT</paper-button>
+                                </div>
+                                <div class="card-content">
+                                        this is the content
+                                </div>
+                        </paper-card>
+                </app-layout>
         </template>
 </dom-module>
 <script>
