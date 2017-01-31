@@ -15,6 +15,9 @@ class Com:
     def stop(self):
         self.client.loop_stop()
 
+    def send_receive(self):
+        self.client.loop()
+
     def on_connect(self,client, userdata, flags, rc):
         print("*** communication system online *** " + str(rc))
         self.client.publish("robot/status","ready")
@@ -32,3 +35,6 @@ class Com:
 
     def publish(self, topic, payload):
         self.client.publish(topic=topic,payload=payload)
+
+    def heartbeat(self,payload):
+        self.client.publish(topic="robot/heartbeat", payload=payload)

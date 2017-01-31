@@ -16,6 +16,10 @@ class Motion:
         self.leftMotor = self.motors[0]
         self.rightMotor = self.motors[1]
 
+    @property
+    def is_busy(self):
+        return any(m.state for m in self.motors)
+
     def acknowledge_command(self):
         ev3.Sound.speak("thank you, command sequence received").wait()
 
@@ -25,7 +29,7 @@ class Motion:
     def drive(self,rotations,speed):
         self._rotate_motor(self.leftMotor,rotations,speed)
         self._rotate_motor(self.rightMotor,rotations,speed)
-        self._wait_until_done_moving()
+
 
     def reverse(self,rotations,speed):
         drive(-rotations,speed)
@@ -33,8 +37,6 @@ class Motion:
     def turn(self,rotations,speed):
         self._rotate_motor(self.leftMotor, rotations, speed)
         self._rotate_motor(self.rightMotor, -rotations, speed)
-        self._wait_until_done_moving()
-
 
     def turn_left(self,roations,speed):
         self.turn(-rotations,speed)
@@ -49,8 +51,4 @@ class Motion:
     def _convert_rotation_to_degrees(self, rotations):
         return rotations * 360
 
-    def _wait_until_done_moving(self):
-        while any(m.state for m in self.motors):
-            print(self.leftMotor.duty_cycle)
-            print(self.rightMotor.duty_cycle)
-            sleep(1)
+
