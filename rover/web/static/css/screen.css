@@ -34,3 +34,49 @@ body {
 .green {
         color:#9FC20C;
 }
+.green-button {
+         background:#D1D8EA;
+         color:#2C3240;
+}
+
+.widget {
+     margin:5px;
+     border-radius:4px;
+}
+.action-bar {
+padding:10px;
+border:1px solid #2C3240;
+margin:10px 0;
+border-radius:4px;
+
+}
+
+.plan-steps-container {
+padding:10px;
+border:1px solid #2C3240;
+margin:10px 0;
+border-radius:4px;
+min-height:400px;
+
+}
+
+.step {
+padding:5px 0;
+border-radius:4px;
+background:#107BD2;
+margin:5px 0;
+
+}
+
+.step-icon {
+padding:0 10px;
+display:inline-block;
+}
+
+.icon-button {
+padding-right:10px;
+}
+
+.step-text{
+display:inline-block;
+}

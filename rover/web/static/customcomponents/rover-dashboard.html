@@ -3,45 +3,209 @@
 <link rel="import" href="../components/paper-header-panel/paper-header-panel.html" >
 <link rel="import" href="../components/paper-drawer-panel/paper-drawer-panel.html" >
 <link rel="import" href="../components/paper-toolbar/paper-toolbar.html" >
+<link rel="import" href="../components/paper-button/paper-button.html" >
 <link rel="import" href="../components/paper-icon-button/paper-icon-button.html" >
 <link rel="import" href="../components/paper-tabs/paper-tabs.html" >
+
+<link rel="import" href="../components/iron-icon/iron-icon.html" >
+<link rel="import" href="../components/vaadin-icons/vaadin-icons.html">
 
 <link rel="import" href="../components/iron-icons/iron-icons.html" >
 <link rel="import" href="../components/iron-flex-layout/iron-flex-layout.html" >
 <link rel="import" href="/static/components/iron-flex-layout/iron-flex-layout-classes.html" >
+
 <dom-module id="rover-dashboard">
-        <template>
-                <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors"></style>
-                <style>
-                  .widget {
-                         margin:5px;
-                         border-radius:4px;
-                  }
-                </style>
-                        <div class="layout horizontal">
-                          <div class="widget panel flex-6" style="height:150px"><span class="blue label">Robot Planner</span></div>
-                          <div class="widget panel flex-3">
-                                <div class="green label">Sensor Data:</div>
-                          </div>
-                          <div class="widget panel flex-3 green label" style="height:50px" >
-                                 <div class="green label">COM:</div>
-                          </div>
-                        </div>
-        </template>
+<template>
+  <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors"></style>
+
+  <div class="layout horizontal">
+
+    <div class="flex-4">
+            <div class="widget panel">
+                    <span class="blue label">Robot Planner</span>
+                    <div class="action-bar">
+                            <paper-button on-tap="addForwardCommand" raised  >
+                                    <iron-icon icon="vaadin-icons:arrow-up"></iron-icon>
+                            </paper-button>
+                            <paper-button on-tap="addReverseCommand" raised>
+                                    <iron-icon icon="vaadin-icons:arrow-down"></iron-icon>
+                            </paper-button>
+                            <paper-button  on-tap="addLeftCommand" raised>
+                                    <iron-icon icon="vaadin-icons:rotate-left"></iron-icon>
+                            </paper-button>
+                            <paper-button on-tap="addRightCommand" raised>
+                                    <iron-icon icon="vaadin-icons:rotate-right"></iron-icon>
+                            </paper-button>
+                    </div>
+                    <div class="plan-steps-container">
+                            <template is="dom-repeat" items="{{steps}}" >
+                                  <div class="step">
+                                      <div class="step-icon"><iron-icon icon="[[_getCommandIcon(item.description)]]" ></iron-icon></div>
+                                      <div class="step-text">{{item.description}}</div>
+                                  </div>
+                            </template>
+                    </div>
+                    <div class="action-bar">
+                            <paper-button on-tap="transmitCommands" raised class="green-button"  ><iron-icon class="icon-button" icon="vaadin-icons:signal" ></iron-icon>Transmit Command Sequence</paper-button>
+                    </div>
+            </div>
+    </div>
+
+    <div class="flex-4">
+       <div class="widget panel">
+           <div class="green label">Sensor Data:</div>
+       </div>
+    </div>
+
+    <div class="widget panel flex-4 green label">
+           <div class="green label">COM:</div>
+    </div>
+
+  </div>
+</template>
 </dom-module>
 <script>
+
+  var planner = {};
+
+  planner.step = function(state, action) {
+    switch(action.type) {
+      case 'ADD_STEP':
+        return {
+          "id": action.id,
+          "verb": action.verb,
+          "rotations": action.rotations,
+          "speed": action.speed,
+          "description":action.description,
+          "completed": false
+        };
+
+      case 'STEP_COMPLETED':
+        if (state.id !== action.id){
+          return state;
+        }
+       return Object.assign({}, state, {completed:true});
+
+      default:
+        return state;
+    }
+  }
+
+  planner.steps = function(state, action) {
+
+     if (typeof(state)==='undefined') {
+      return [];
+     }
+
+     switch (action.type) {
+      case "ADD_STEP":
+        return state.concat(planner.step(undefined,action));
+      case "STEP_COMPLETE":
+        return state.map(function(step) {
+          return planner.step(step,action);
+        });
+      default:
+        return action;
+     }
+  }
+
+  planner.app = function(state, action) {
+    if (typeof(state)==='undefined') {
+       state = {};
+    }
+    return {
+      steps: planner.steps(
+         state.steps,
+         action
+      )
+    };
+  };
+
+
+  var store = Redux.createStore(planner.app);
+  var ReduxBehavior = PolymerRedux(store);
+
+  // temporary guid generator
+  function guid() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+      s4() + '-' + s4() + s4() + s4();
+  }
+
   Polymer({
           is: "rover-dashboard",
+          behaviors: [ ReduxBehavior],
+          addForwardCommand:function() {
+
+            this.dispatch({
+              type:"ADD_STEP",
+              id:guid(),
+              verb:"DRIVE",
+              rotations:1,
+              speed:500,
+              description:"FORWARD"
+            });
+          },
+          addReverseCommand:function() {
+            this.dispatch({
+              type:"ADD_STEP",
+              id:guid(),
+              verb:"DRIVE",
+              rotations:-1,
+              speed:500,
+              description:"REVERSE"
+            });
+          },
+           addLeftCommand:function() {
+            this.dispatch({
+              type:"ADD_STEP",
+              id:guid(),
+              verb:"TURN",
+              rotations:0.5,
+              speed:400,
+              description:"ROTATE LEFT"
+            });
+          },
+           addRightCommand:function() {
+            this.dispatch({
+                    type:"ADD_STEP",
+                    id:guid(),
+                    verb:"TURN",
+                    rotations:-0.5,
+                    speed:400,
+                    description:"ROTATE RIGHT"
+                  });
+          },
+          transmitCommands:function() {
+             socket.emit('transmit_command_sequence', {
+                     commands: store.getState().steps
+             });
+          },
+          _getCommandIcon:function(description) {
+              switch(description){
+                case "FORWARD":
+                  return "vaadin-icons:arrow-up";
+                case "REVERSE":
+                  return "vaadin-icons:arrow-down";
+                case "ROTATE RIGHT":
+                  return "vaadin-icons:rotate-right";
+                case "ROTATE LEFT":
+                  return "vaadin-icons:rotate-left";
+              }
+          },
           properties: {
-                  leftShow: {
-                          type: Boolean,
-                          value: true,
-                          notify:true
-                  },
-                  rightShow: {
-                          type: Boolean,
-                          value: true
+                  steps: {
+                    type: Array,
+                    statePath: "steps",
+                    readonOnly: true
                   }
           }
   });
+
+
+
 </script>

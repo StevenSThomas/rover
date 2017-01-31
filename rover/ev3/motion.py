@@ -16,6 +16,12 @@ class Motion:
         self.leftMotor = self.motors[0]
         self.rightMotor = self.motors[1]
 
+    def acknowledge_command(self):
+        ev3.Sound.speak("thank you, command sequence received").wait()
+
+    def mission_complete(self):
+        ev3.Sound.speak("Mission Complete!").wait()
+
     def drive(self,rotations,speed):
         self._rotate_motor(self.leftMotor,rotations,speed)
         self._rotate_motor(self.rightMotor,rotations,speed)
@@ -28,7 +34,7 @@ class Motion:
         self._rotate_motor(self.leftMotor, rotations, speed)
         self._rotate_motor(self.rightMotor, -rotations, speed)
         self._wait_until_done_moving()
-        ev3.Sound.speak('number five, is alive').wait()
+
 
     def turn_left(self,roations,speed):
         self.turn(-rotations,speed)
@@ -45,4 +51,6 @@ class Motion:
 
     def _wait_until_done_moving(self):
         while any(m.state for m in self.motors):
-            sleep(0.1)
+            print(self.leftMotor.duty_cycle)
+            print(self.rightMotor.duty_cycle)
+            sleep(1)

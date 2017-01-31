@@ -6,6 +6,9 @@
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
+          <script type="text/javascript" src="/static/components/redux/index.js" ></script>
+          <script type="text/javascript" src="/static/components/polymer-redux/polymer-redux.js" ></script>
+
           <script type="text/javascript" src="/static/socket.io.min.js"></script>
           <script type="text/javascript" charset="utf-8">
                 var socket = io.connect('http://' + document.domain + ':' + location.port);
@@ -24,6 +27,5 @@
  </head>
  <body class="fullbleed vertical layout">
          <rover-dashboard></rover-dashboard>
-
 </body>
  </html>
